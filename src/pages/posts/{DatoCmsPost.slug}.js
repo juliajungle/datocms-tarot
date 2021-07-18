@@ -8,7 +8,7 @@ import PostHeader from "../../components/post-header";
 import SectionSeparator from "../../components/section-separator";
 import { HelmetDatoCms } from "gatsby-source-datocms";
 
-export default function Post({ data: { site, post, morePosts } }) {
+export default function Card({ data: { site, post, morePosts } }) {
   return (
     <Container>
       <HelmetDatoCms seo={post.seo} favicon={site.favicon} />
@@ -18,7 +18,6 @@ export default function Post({ data: { site, post, morePosts } }) {
           title={post.title}
           coverImage={post.coverImage}
           date={post.date}
-          author={post.author}
         />
         <PostBody content={post.content} />
       </article>
@@ -35,7 +34,7 @@ export const query = graphql`
         ...GatsbyDatoCmsFaviconMetaTags
       }
     }
-    post: datoCmsPost(id: { eq: $id }) {
+    post: datoCmsCard(id: { eq: $id }) {
       seo: seoMetaTags {
         ...GatsbyDatoCmsSeoMetaTags
       }
@@ -67,20 +66,8 @@ export const query = graphql`
           ...GatsbyDatoCmsFluid
         }
       }
-      author {
-        name
-        picture {
-          fixed(
-            width: 48
-            height: 48
-            imgixParams: { fm: "jpg", fit: "crop", sat: -100 }
-          ) {
-            ...GatsbyDatoCmsFixed
-          }
-        }
-      }
     }
-    morePosts: allDatoCmsPost(
+    moreCards: allDatoCmsCard(
       sort: { fields: date, order: DESC }
       limit: 2
       filter: { id: { ne: $id } }
@@ -96,18 +83,6 @@ export const query = graphql`
             sizes: "(max-width: 760px) 100vw, (max-width: 1500px) 50vw, 700px"
           ) {
             ...GatsbyDatoCmsFluid
-          }
-        }
-        author {
-          name
-          picture {
-            fixed(
-              width: 48
-              height: 48
-              imgixParams: { fm: "jpg", fit: "crop", sat: -100 }
-            ) {
-              ...GatsbyDatoCmsFixed
-            }
           }
         }
       }
